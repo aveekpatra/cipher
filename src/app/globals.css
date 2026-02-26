@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -12,15 +12,74 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Hero SVG line art animations ── */
+
+.draw-line {
+  --d: 0s; /* per-path delay, set via inline style */
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  fill: none;
+  opacity: 0;
+  animation:
+    draw-appear 0.01s var(--d) forwards,
+    draw-line 2.5s cubic-bezier(0.4, 0, 0.2, 1) var(--d) forwards,
+    float-gentle 8s ease-in-out calc(var(--d) + 2.5s) infinite;
+}
+
+.shimmer {
+  animation:
+    draw-appear 0.01s var(--d) forwards,
+    draw-line 2.5s cubic-bezier(0.4, 0, 0.2, 1) var(--d) forwards,
+    float-gentle 8s ease-in-out calc(var(--d) + 2.5s) infinite,
+    shimmer 4s ease-in-out calc(var(--d) + 2.5s) infinite;
+}
+
+/* Snap from invisible to visible at the delay point */
+@keyframes draw-appear {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 2000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes float-gentle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(0.3deg);
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
