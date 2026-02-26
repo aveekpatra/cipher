@@ -71,8 +71,20 @@ const t = {
       label: "Begin a conversation",
       h1: "The best placements start",
       h2: "with a quiet conversation.",
-      p: "Whether you are looking to strengthen your team or considering your next move, we are here to listen. Every exchange is confidential.",
-      cta: "Book a meeting",
+      form: {
+        heading: "Get in touch",
+        sub: "Tell us a little about what you are looking for. Every exchange is confidential.",
+        name: "Full name",
+        email: "Email address",
+        company: "Company / brand",
+        message: "How can we help?",
+        send: "Send inquiry",
+      },
+      booking: {
+        heading: "Book a meeting",
+        sub: "Prefer a direct conversation? Schedule a confidential call with our team at a time that suits you.",
+        cta: "Schedule a call",
+      },
     },
     footer: { rights: "All rights reserved." },
   },
@@ -138,8 +150,20 @@ const t = {
       label: "Entamer une conversation",
       h1: "Les meilleurs placements commencent",
       h2: "par une conversation discrète.",
-      p: "Que vous cherchiez à renforcer votre équipe ou que vous envisagiez votre prochain défi, nous sommes à votre écoute. Chaque échange est confidentiel.",
-      cta: "Prendre rendez-vous",
+      form: {
+        heading: "Nous contacter",
+        sub: "Dites-nous ce que vous recherchez. Chaque échange est confidentiel.",
+        name: "Nom complet",
+        email: "Adresse e-mail",
+        company: "Entreprise / marque",
+        message: "Comment pouvons-nous vous aider ?",
+        send: "Envoyer la demande",
+      },
+      booking: {
+        heading: "Prendre rendez-vous",
+        sub: "Vous préférez une conversation directe ? Planifiez un appel confidentiel avec notre équipe.",
+        cta: "Planifier un appel",
+      },
     },
     footer: { rights: "Tous droits réservés." },
   },
@@ -205,8 +229,20 @@ const t = {
       label: "Iniciar una conversación",
       h1: "Las mejores colocaciones comienzan",
       h2: "con una conversación discreta.",
-      p: "Ya sea que busque fortalecer su equipo o esté considerando su próximo paso, estamos aquí para escuchar. Cada intercambio es confidencial.",
-      cta: "Reservar una reunión",
+      form: {
+        heading: "Contáctenos",
+        sub: "Cuéntenos un poco sobre lo que busca. Cada intercambio es confidencial.",
+        name: "Nombre completo",
+        email: "Correo electrónico",
+        company: "Empresa / marca",
+        message: "¿Cómo podemos ayudarle?",
+        send: "Enviar consulta",
+      },
+      booking: {
+        heading: "Reservar una reunión",
+        sub: "¿Prefiere una conversación directa? Programe una llamada confidencial con nuestro equipo.",
+        cta: "Programar una llamada",
+      },
     },
     footer: { rights: "Todos los derechos reservados." },
   },
@@ -765,50 +801,176 @@ export default function Home() {
 
     {/* ── Contact / CTA ── */}
     <section id="contact" className="bg-white text-black">
-      <div className="mx-auto max-w-2xl px-8 py-32 text-center md:py-44">
-        <motion.p
-          variants={fade}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="text-xs uppercase tracking-[0.3em] text-black/40"
-        >
-          {c.contact.label}
-        </motion.p>
-        <motion.h2
-          variants={fade}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          custom={0.15}
-          className="mt-6 text-[28px] font-light leading-snug md:text-[36px]"
-        >
-          {c.contact.h1}
-          <br />
-          {c.contact.h2}
-        </motion.h2>
-        <motion.p
-          variants={fade}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          custom={0.3}
-          className="mt-8 text-[15px] leading-relaxed text-black/50"
-        >
-          {c.contact.p}
-        </motion.p>
-        <motion.a
-          variants={fade}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          custom={0.45}
-          href="#contact"
-          onClick={(e) => scrollTo(e, "#contact")}
-          className="mt-12 inline-block rounded-full border border-black/80 px-8 py-3 text-xs uppercase tracking-[0.2em] transition hover:bg-black hover:text-white"
-        >
-          {c.contact.cta}
-        </motion.a>
+      <div className="mx-auto max-w-6xl px-8 py-32 md:py-44">
+        {/* Section header */}
+        <div className="text-center">
+          <motion.p
+            variants={fade}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-xs uppercase tracking-[0.3em] text-black/40"
+          >
+            {c.contact.label}
+          </motion.p>
+          <motion.h2
+            variants={fade}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            custom={0.15}
+            className="mt-6 text-[28px] font-light leading-snug md:text-[36px]"
+          >
+            {c.contact.h1}
+            <br />
+            {c.contact.h2}
+          </motion.h2>
+        </div>
+
+        {/* Two-column layout */}
+        <div className="mt-20 grid items-start gap-16 md:grid-cols-[1fr_auto_1fr] md:gap-0">
+
+          {/* ── Left: Inquiry form ── */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="md:pr-16"
+          >
+            <motion.h3
+              variants={fade}
+              className="text-[18px] font-light tracking-wide"
+            >
+              {c.contact.form.heading}
+            </motion.h3>
+            <motion.p
+              variants={fade}
+              className="mt-3 text-[14px] leading-relaxed text-black/50"
+            >
+              {c.contact.form.sub}
+            </motion.p>
+            <motion.form
+              variants={stagger}
+              className="mt-10 space-y-6"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <motion.div variants={fade}>
+                <label className="block text-[11px] uppercase tracking-[0.2em] text-black/40">
+                  {c.contact.form.name}
+                </label>
+                <input
+                  type="text"
+                  className="mt-2 w-full border-b border-black/15 bg-transparent pb-3 text-[15px] font-light outline-none transition-colors focus:border-black/40"
+                />
+              </motion.div>
+              <motion.div variants={fade}>
+                <label className="block text-[11px] uppercase tracking-[0.2em] text-black/40">
+                  {c.contact.form.email}
+                </label>
+                <input
+                  type="email"
+                  className="mt-2 w-full border-b border-black/15 bg-transparent pb-3 text-[15px] font-light outline-none transition-colors focus:border-black/40"
+                />
+              </motion.div>
+              <motion.div variants={fade}>
+                <label className="block text-[11px] uppercase tracking-[0.2em] text-black/40">
+                  {c.contact.form.company}
+                </label>
+                <input
+                  type="text"
+                  className="mt-2 w-full border-b border-black/15 bg-transparent pb-3 text-[15px] font-light outline-none transition-colors focus:border-black/40"
+                />
+              </motion.div>
+              <motion.div variants={fade}>
+                <label className="block text-[11px] uppercase tracking-[0.2em] text-black/40">
+                  {c.contact.form.message}
+                </label>
+                <textarea
+                  rows={3}
+                  className="mt-2 w-full resize-none border-b border-black/15 bg-transparent pb-3 text-[15px] font-light outline-none transition-colors focus:border-black/40"
+                />
+              </motion.div>
+              <motion.button
+                variants={fade}
+                type="submit"
+                className="mt-4 border-b border-black/30 pb-1 text-xs uppercase tracking-[0.2em] transition hover:border-black"
+              >
+                {c.contact.form.send}
+              </motion.button>
+            </motion.form>
+          </motion.div>
+
+          {/* ── Center divider ── */}
+          <motion.div
+            variants={lineDraw}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            custom={0.3}
+            className="hidden h-full w-px origin-top bg-black/10 md:block"
+          />
+
+          {/* ── Right: Book a meeting ── */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="flex flex-col md:pl-16"
+          >
+            <motion.h3
+              variants={fade}
+              className="text-[18px] font-light tracking-wide"
+            >
+              {c.contact.booking.heading}
+            </motion.h3>
+            <motion.p
+              variants={fade}
+              className="mt-3 text-[14px] leading-relaxed text-black/50"
+            >
+              {c.contact.booking.sub}
+            </motion.p>
+
+            <motion.div variants={fade} className="mt-10">
+              {/* Calendar-style visual accent */}
+              <div className="flex items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full border border-black/10">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="text-black/30">
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[13px] text-black/40">30 min</p>
+                  <p className="text-[13px] text-black/40">Confidential</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div variants={fade} className="mt-8 space-y-4">
+              {/* Time slot indicators */}
+              {["Mon – Fri", "9:00 – 18:00 CET"].map((slot) => (
+                <div key={slot} className="flex items-center gap-3">
+                  <span className="block h-px w-4 bg-black/20" />
+                  <span className="text-[13px] text-black/40">{slot}</span>
+                </div>
+              ))}
+            </motion.div>
+
+            <motion.a
+              variants={fade}
+              href="mailto:hello@cipher.com"
+              className="mt-12 inline-block self-start rounded-full border border-black/80 px-8 py-3 text-xs uppercase tracking-[0.2em] transition hover:bg-black hover:text-white"
+            >
+              {c.contact.booking.cta}
+            </motion.a>
+          </motion.div>
+
+        </div>
+
       </div>
     </section>
 
