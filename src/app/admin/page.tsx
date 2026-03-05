@@ -489,7 +489,7 @@ function AdminDashboard() {
       {/* Top bar */}
       <header className="sticky top-0 z-50 flex items-center justify-between border-b border-neutral-200 bg-white px-6 py-4">
         <div className="flex items-center gap-6">
-          <h1 className="text-sm font-light tracking-[0.3em] uppercase">Cipher Admin</h1>
+          <h1 className="text-sm font-light tracking-[0.3em] uppercase text-neutral-900">Cipher Admin</h1>
           <div className="flex rounded-md border border-neutral-200 text-xs">
             <button
               onClick={() => setActiveTab("content")}
