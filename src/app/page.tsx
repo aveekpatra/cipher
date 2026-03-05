@@ -1,8 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import HeroBackground from "@/components/HeroBackground";
 
 /* ── translations ── */
@@ -248,6 +250,18 @@ const t = {
   },
 } as const;
 
+/* ── fallback images ── */
+const FALLBACK_IMAGES: Record<string, string> = {
+  services_employer: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1074&auto=format&fit=crop",
+  services_talent: "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?q=80&w=1074&auto=format&fit=crop",
+  fullwidth_break: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop",
+  team_0: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=600&auto=format&fit=crop",
+  team_1: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
+  team_2: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
+  team_3: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=600&auto=format&fit=crop",
+  team_4: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop",
+};
+
 /* ── shared animation helpers ── */
 const easing = [0.25, 0.1, 0.25, 1] as const;
 
@@ -284,7 +298,25 @@ const imgReveal = {
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [lang, setLang] = useState<Lang>("en");
-  const c = t[lang];
+
+  /* ── Convex CMS data ── */
+  const cmsContent = useQuery(api.content.get);
+  const cmsImages = useQuery(api.images.list);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const c = cmsContent ? (cmsContent as any)[lang] : t[lang];
+
+  const imageMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    if (cmsImages) {
+      for (const img of cmsImages) {
+        map[img.key] = img.url;
+      }
+    }
+    return map;
+  }, [cmsImages]);
+
+  const getImage = (key: string) => imageMap[key] || FALLBACK_IMAGES[key] || "";
 
   /* ── Lenis smooth scroll for anchor links ── */
   const lenis = useLenis();
@@ -556,7 +588,7 @@ export default function Home() {
             viewport={{ once: true, margin: "-100px" }}
           >
             <img
-              src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1074&auto=format&fit=crop"
+              src={getImage("services_employer")}
               alt="Fine dining restaurant interior"
               className="aspect-[4/5] w-full object-cover"
             />
@@ -580,7 +612,7 @@ export default function Home() {
               {c.services.emp.p}
             </motion.p>
             <motion.ul variants={fade} className="mt-8 space-y-3 text-[14px] text-black/50">
-              {c.services.emp.roles.map((role) => (
+              {c.services.emp.roles.map((role: string) => (
                 <li key={role} className="flex items-start gap-3">
                   <span className="mt-1.5 block h-px w-4 shrink-0 bg-black/30" />
                   {role}
@@ -635,7 +667,7 @@ export default function Home() {
             className="order-1 md:order-2"
           >
             <img
-              src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?q=80&w=1074&auto=format&fit=crop"
+              src={getImage("services_talent")}
               alt="Chef at work"
               className="aspect-[4/5] w-full object-cover"
             />
@@ -703,14 +735,14 @@ export default function Home() {
           style={{ x: teamX, opacity: teamOpacity }}
           className="mt-16 flex gap-6 pl-8 pr-16 md:gap-8 md:pl-[calc((100vw-72rem)/2+2rem)]"
         >
-          {c.team.members.map((member) => (
+          {c.team.members.map((member: { name: string; role: string; img?: string }, index: number) => (
             <div
               key={member.name}
               className="group w-[280px] shrink-0 md:w-[320px]"
             >
               <div className="relative overflow-hidden">
                 <img
-                  src={member.img}
+                  src={getImage(`team_${index}`)}
                   alt={member.name}
                   className="aspect-[3/4] w-full object-cover grayscale transition-all duration-700 group-hover:scale-[1.03] group-hover:grayscale-0"
                 />
@@ -759,7 +791,7 @@ export default function Home() {
           variants={stagger}
           className="mt-24 grid gap-20 md:grid-cols-3 md:gap-12"
         >
-          {c.process.steps.map((step) => (
+          {c.process.steps.map((step: { num: string; title: string; text: string }) => (
             <motion.div key={step.num} variants={fade} className="text-center">
               <span className="text-[48px] font-extralight text-white/20">{step.num}</span>
               <h3 className="mt-4 text-[15px] uppercase tracking-[0.2em]">
@@ -792,7 +824,7 @@ export default function Home() {
       className="relative h-[50vh] md:h-[60vh]"
     >
       <img
-        src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop"
+        src={getImage("fullwidth_break")}
         alt="Restaurant atmosphere"
         className="h-full w-full object-cover"
       />
